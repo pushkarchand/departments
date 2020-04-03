@@ -1,5 +1,8 @@
 const formDBA=require('../mongodb/models/form');
 const responseHandler=require('../utils/responsehandler');
+const rejected="REJECTED";
+const approved="APPROVED";
+const pending="PENDING";
 
 exports.getFormDetails=async (req,res)=>{
     try{
@@ -35,7 +38,7 @@ exports.createForm=async (req,res)=>{
         delete form._id;
         delete form.createdAt;
         delete form.updatedAt;
-        const formDBAResponse= await formDBA.create(form).exec();
+        const formDBAResponse= await new formDBA(form).save();
         responseHandler.successResponse(req,res,formDBAResponse);
     }
     catch(err){
@@ -58,7 +61,7 @@ exports.enumerateForms=async (req,res)=>{
 
 exports.enumerateApprovedForms=async (req,res)=>{
     try{
-        const formDBAResponse=await formDBA.find().exec();
+        const formDBAResponse=await formDBA.find({status:approved}).exec();
         responseHandler.successResponse(req,res,formDBAResponse);
     }
     catch(err){
@@ -70,7 +73,7 @@ exports.enumerateApprovedForms=async (req,res)=>{
 
 exports.enumeratePendingForms=async (req,res)=>{
     try{
-        const formDBAResponse=await formDBA.find().exec();
+        const formDBAResponse=await formDBA.find({status:pending}).exec();
         responseHandler.successResponse(req,res,formDBAResponse);
     }
     catch(err){
@@ -82,7 +85,7 @@ exports.enumeratePendingForms=async (req,res)=>{
 
 exports.enumerateRejectedForms=async (req,res)=>{
     try{
-        const formDBAResponse=await formDBA.find().exec();
+        const formDBAResponse=await formDBA.find({status:rejected}).exec();
         responseHandler.successResponse(req,res,formDBAResponse);
     }
     catch(err){

@@ -61,7 +61,9 @@ exports.createUser=(req,res)=>{
 
 exports.enumerateUsers=async (req,res)=>{
     try{
-        const userDBAResponse= await userDBA.find({},{password:0}).populate('department').exec()
+        const userDBAResponse= await userDBA.find({},{password:0})
+        // .populate('department')
+        .exec()
             responseHandler.successResponse(req,res,userDBAResponse);
     }
      catch(err){
